@@ -15,19 +15,20 @@
         <div class="form">
             <form action="{{url_for('search_list')}}"method="post">
                 <input type="text"name="search"placeholder="商品を検索">
-                <button type="button">検索</button>
+                <button type="submit">検索</button>
             </form>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                <a class="nav-link" href="{{url_for('product_list')}}">
-                    <button type="button" value="book">すべて</button>
-                </a>
-                <a class="nav-link" href="{{url_for('cate_list', cate='book')}}">
-                    <button type="button" value="book">本・コミック・雑誌</button>
-                </a>
+                <form class="nav-link" action="{{url_for('product_list')}}">
+                    <button type="submit">すべて</button>
+                </form>
+                <form class="nav-link" action="{{url_for('cate_list')}}"method="get">
+                    <input type="hidden" name="cate" value="book">
+                    <button type="submit">本・コミック・雑誌</button>
+                </form>
                 <a class="nav-link" href="{{url_for('cate_list', cate="dvd")}}">
                     <button type="button" value="book">DVD・ミュージック・ゲーム</button>
                 </a>
@@ -52,6 +53,22 @@
         </nav>
     </header>
 
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>商品名</th>
+                <th>価格</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in product_list %}
+            <tr>
+                <td>{{ book[1] }}</td>
+                <td>{{ book[2] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
     {% block content %}
     {% endblock %}
 

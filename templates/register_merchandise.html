@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>商品登録</h1>
+    {% if error != null %}
+    <p style="color:red">{{error}}</p>
+    {% endif %}
+    {% if msg != null %}
+    <p style="color:blue">{{msg}}</p>
+    {% endif %}
+    <form action="{{url_for('merchandise_exe')}}"method="post">
+        商品名：<input type="text"name="name"><br>
+        価格：<input type="text"name="price"><br>
+        カテゴリー：<select name="cate">
+                        <option value="book">本・コミック・雑誌</option>
+                        <option value="dvd">DVD・ミュージック・ゲーム</option>
+                        <option value="pc">家電・カメラ・パソコン</option>
+                        <option value="pet">キッチン・ペット</option>
+                        <option value="food">食品・飲料</option>
+                        <option value="clothe">服・シューズ</option>
+                        <option value="sports">スポーツ・アウトドア</option>
+                    </select>
+        <br>
+        <button type="submit">登録</button>
+        </form>
+        
+</body>
+</html>

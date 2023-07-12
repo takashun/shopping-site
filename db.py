@@ -62,11 +62,27 @@ def login(mail, password):
     
     return flg
 
+def register_merchandise(name, price, cate):
+    sql = 'INSERT INTO shopping_merchandise VALUES (default, %s, %s, %s)'
+    try: 
+        connection = get_connection()
+        cursor = connection.cursor()
+        cursor.execute(sql, (name, price, cate))
+        count = cursor.rowcount
+        connection.commit()
+    except psycopg2.DatabaseError: 
+        count=0
+    finally:
+        cursor.close()
+        connection.close()
+        
+    return count
+
 def select_all_merchandise():
     connection = get_connection()
     cursor = connection.cursor()
     
-    sql = "SELECT title, author, publisher, pages FROM merchandise"
+    sql = "SELECT * FROM shopping_merchandise"
     
     cursor.execute(sql)
     rows = cursor.fetchall()
@@ -76,13 +92,27 @@ def select_all_merchandise():
     
     return rows
 
-def select_all_search_merchandise(category):
+def select_all_cate_merchandise(category):
     connection = get_connection()
     cursor = connection.cursor()
     
-    sql = "SELECT title, author, publisher, pages FROM merchandise where = %s"
+    sql = "SELECT * FROM shopping_merchandise where category = %s"
     
     cursor.execute(sql, (category,))
+    rows = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    return rows
+
+def select_all_search_merchandise(key):
+    connection = get_connection()
+    cursor = connection.cursor()
+    
+    sql = "SELECT * FROM shopping_merchandise where name like %s"
+    key = '%' + key + '%'
+    cursor.execute(sql, (key,))
     rows = cursor.fetchall()
     
     cursor.close()
