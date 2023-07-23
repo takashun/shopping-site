@@ -5,8 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{url_for('static', filename='/css/style.css')}}">
-    {% block css %}
-    {% endblock %}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Document</title>
 </head>
@@ -16,43 +14,43 @@
             <a href="{{url_for('logout')}}">
                 <button type="button">ログアウト</button>
             </a>
-            <a href="{{url_for('cart_list')}}">
-                <button type="button">カート</button>
-            </a>
         </div>    
         <div class="form">
-            <form action="{{url_for('search_list')}}"method="post">
+            <form action="{{url_for('search_admin')}}"method="post">
                 <input type="text"name="search"placeholder="商品を検索">
                 <button type="submit">検索</button>
             </form>
         </div>
+        <a class="form" href="{{url_for('register_merchandise')}}">
+            <button type="button">商品追加</button>
+        </a>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                <form class="nav-link" action="{{url_for('product_list')}}">
+                <form class="nav-link" action="{{url_for('admin')}}">
                     <button type="submit">すべて</button>
                 </form>
-                <form class="nav-link" action="{{url_for('cate_list')}}"method="get">
+                <form class="nav-link" action="{{url_for('cate_admin')}}"method="get">
                     <input type="hidden" name="cate" value="book">
                     <button type="submit">本・コミック・雑誌</button>
                 </form>
-                <a class="nav-link" href="{{url_for('cate_list', cate="dvd")}}">
+                <a class="nav-link" href="{{url_for('cate_admin', cate="dvd")}}">
                     <button type="button" value="book">DVD・ミュージック・ゲーム</button>
                 </a>
-                <a class="nav-link" href="{{url_for('cate_list', cate="pc")}}">
+                <a class="nav-link" href="{{url_for('cate_admin', cate="pc")}}">
                     <button type="button" value="book">家電・カメラ・パソコン</button>
                 </a>
-                <a class="nav-link" href="{{url_for('cate_list', cate="pet")}}">
+                <a class="nav-link" href="{{url_for('cate_admin', cate="pet")}}">
                     <button type="button" value="book">キッチン・ペット</button>
                 </a>
-                <a class="nav-link" href="{{url_for('cate_list', cate="food")}}">
+                <a class="nav-link" href="{{url_for('cate_admin', cate="food")}}">
                     <button type="button" value="book">食品・飲料</button>
                 </a>
-                <a class="nav-link" href="{{url_for('cate_list', cate="clothe")}}">
+                <a class="nav-link" href="{{url_for('cate_admin', cate="clothe")}}">
                     <button type="button" value="book">服・シューズ</button>
                 </a>
-                <a class="nav-link" href="{{url_for('cate_list', cate="sports")}}">
+                <a class="nav-link" href="{{url_for('cate_admin', cate="sports")}}">
                     <button type="button" value="book">スポーツ・アウトドア</button>
                 </a>
                 </div>
@@ -71,14 +69,12 @@
         <tbody>
             {% for book in product_list %}
             <tr>
-                <td><a href="{{url_for('merchandise_detail', name=book[1])}}"><div>{{ book[1] }}</div></a></td>
+                <td><a href="{{url_for('delete_merchandise', name=book[1])}}"><div>{{ book[1] }}</div></a></td>
                 <td><div>{{ book[2] }}</div></td>
             </tr>
             {% endfor %}
         </tbody>
       </table>
-    {% block content %}
-    {% endblock %}
 
 </body>
 </html>

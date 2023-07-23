@@ -2,3 +2,13 @@
   display: flex;
   justify-content: center;
 }
+
+.cart {
+  display: flex;
+  justify-content: center;
+}
+
+.head {
+  display: flex;
+  justify-content: right;
+}

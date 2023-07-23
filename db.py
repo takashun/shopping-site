@@ -18,16 +18,18 @@ def get_hash(password, salt):
     return hashed_password
 
 
-def insert_user(user_name, mail, password):
-    sql = 'INSERT INTO shopping_user VALUES (default, %s, %s, %s, %s)'
+def insert_user(mail, password):
+    sql = 'INSERT INTO shopping_user VALUES (default, %s, %s, %s)'
     salt = get_salt()
     hashed_password = get_hash(password, salt)
     try: 
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute(sql, (user_name, mail, hashed_password, salt))
-        count = cursor.rowcount
+        
+        cursor.execute(sql, (mail, hashed_password, salt))
+        print(mail)
         connection.commit()
+        count = cursor.rowcount
     except psycopg2.DatabaseError: 
         count=0
     finally:
@@ -37,7 +39,7 @@ def insert_user(user_name, mail, password):
     return count
 
 def login(mail, password):
-    sql = 'SELECT hashed_password, salt FROM shopping_user WHERE mail ~ %s'
+    sql = 'SELECT hashed_password, salt FROM shopping_user WHERE mail = %s'
     flg = False
     
     try :
@@ -61,6 +63,20 @@ def login(mail, password):
         connection.close()
     
     return flg
+
+def select_user_id(mail):
+    connection = get_connection()
+    cursor = connection.cursor()
+    
+    sql = "SELECT id FROM shopping_user where mail = %s"
+    
+    cursor.execute(sql, (mail,))
+    rows = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    return rows
 
 def register_merchandise(name, price, cate):
     sql = 'INSERT INTO shopping_merchandise VALUES (default, %s, %s, %s)'
@@ -120,14 +136,90 @@ def select_all_search_merchandise(key):
     
     return rows
 
-def insert_book(title, author, publisher, pages):
+def merchandise_detail(key):
     connection = get_connection()
     cursor = connection.cursor()
     
-    sql = "INSERT INTO books_sample VALUES(default, %s, %s, %s, %s)"
-    cursor.execute(sql, (title, author, publisher, pages))
+    sql = "SELECT * FROM shopping_merchandise where name = %s"
+    cursor.execute(sql, (key,))
+    rows = cursor.fetchall()
+    
+    list = []
+    
+    for row in rows:
+        list.append(row)
+    
+    cursor.close()
+    connection.close()
+    
+    return rows
+
+def merchandise_id(id):
+    connection = get_connection()
+    cursor = connection.cursor()
+    
+    sql = "SELECT * FROM shopping_merchandise where id = %s"
+    cursor.execute(sql, (id,))
+    rows = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    return rows
+
+def register_cart(user_id, name, price):
+    sql = 'INSERT INTO shopping_cart VALUES (%s, %s, %s)'
+    try: 
+        connection = get_connection()
+        cursor = connection.cursor()
+        cursor.execute(sql, (user_id, name, price))
+        count = cursor.rowcount
+        connection.commit()
+    except psycopg2.DatabaseError: 
+        count=0
+    finally:
+        cursor.close()
+        connection.close()
+        
+    return count
+    
+def cart_id(id):
+    connection = get_connection()
+    cursor = connection.cursor()
+    
+    sql = "SELECT * FROM shopping_cart where user_id = %s"
+    cursor.execute(sql, (id,))
+    rows = cursor.fetchall()
+    
+    cursor.close()
+    connection.close()
+    
+    return rows
+
+def delete_cart(id):
+    connection = get_connection()
+    cursor = connection.cursor()
+    
+    sql = "DELETE FROM shopping_cart where user_id = %s"
+    cursor.execute(sql, (id,))
     
     connection.commit()
     
     cursor.close()
     connection.close()
+    
+    return
+
+def delete_merchandise(name):
+    connection = get_connection()
+    cursor = connection.cursor()
+    
+    sql = "DELETE FROM shopping_merchandise where name = %s"
+    cursor.execute(sql, (name,))
+    
+    connection.commit()
+    
+    cursor.close()
+    connection.close()
+    
+    return 
